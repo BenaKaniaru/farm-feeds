@@ -10,7 +10,7 @@ function App() {
       <BrowserRouter>
         <div className="flex flex-row w-full">
           {/* Sidebar fixed width */}
-          <div className="w-64">
+          <div className="w-20 md:w-64">
             <Sidebar />
           </div>
 
