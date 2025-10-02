@@ -9,7 +9,7 @@ export default function WorkOrderDetail() {
     return <div className="p-6">Work order not found.</div>;
   }
 
-  // Helper: format date strings into human-readable format
+  // Format date helper
   const formatDate = (dateStr) => {
     if (!dateStr) return "—";
     try {
@@ -19,11 +19,11 @@ export default function WorkOrderDetail() {
         day: "numeric",
       }).format(new Date(dateStr));
     } catch {
-      return dateStr; // fallback if parsing fails
+      return dateStr;
     }
   };
 
-  // Badge styling
+  // Badge styling (use lowercase keys)
   const badgeClasses = {
     priority: {
       low: "bg-green-100 text-green-700",
@@ -37,6 +37,22 @@ export default function WorkOrderDetail() {
       overdue: "bg-red-100 text-red-700",
     },
   };
+
+  // Fields to show (createdAt removed by request)
+  const fields = [
+    { key: "machine", label: "Machine" },
+    { key: "location", label: "Location" },
+    { key: "activityType", label: "Activity Type" },
+    { key: "projectLead", label: "Project Lead" },
+    { key: "attendedby", label: "Attended By" },
+    { key: "startedon", label: "Started On", isDate: true },
+    { key: "dueDate", label: "Due Date", isDate: true },
+    { key: "completedon", label: "Completed On", isDate: true },
+    { key: "nextServiceDate", label: "Next Service", isDate: true },
+  ];
+
+  const statusKey = (workOrder.status || "").toString().toLowerCase();
+  const priorityKey = (workOrder.priority || "").toString().toLowerCase();
 
   return (
     <div className="p-6">
@@ -55,92 +71,67 @@ export default function WorkOrderDetail() {
         {/* Title + Badges */}
         <div>
           <h2 className="text-xl font-bold">{workOrder.title}</h2>
-          <div className="flex gap-2 mt-2">
-            <span
-              className={`px-3 py-1 text-sm rounded-full ${
-                badgeClasses.priority[workOrder.priority]
-              }`}
-            >
-              Priority: {workOrder.priority}
-            </span>
-            <span
-              className={`px-3 py-1 text-sm rounded-full ${
-                badgeClasses.status[workOrder.status]
-              }`}
-            >
-              Status: {workOrder.status}
-            </span>
+
+          <div className="flex flex-wrap gap-2 mt-2">
+            {workOrder.priority && (
+              <span
+                className={`px-3 py-1 text-sm rounded-full ${
+                  badgeClasses.priority[priorityKey] ||
+                  "bg-gray-100 text-gray-700"
+                }`}
+              >
+                Priority: {workOrder.priority}
+              </span>
+            )}
+
+            {workOrder.status && (
+              <span
+                className={`px-3 py-1 text-sm rounded-full ${
+                  badgeClasses.status[statusKey] || "bg-gray-100 text-gray-700"
+                }`}
+              >
+                Status: {workOrder.status}
+              </span>
+            )}
+
+            {/* Activity Type shown as a pill for visibility */}
+            {workOrder.activityType && (
+              <span className="px-3 py-1 text-sm rounded-full bg-slate-100 text-slate-800">
+                Type: {workOrder.activityType}
+              </span>
+            )}
           </div>
         </div>
 
         {/* Description */}
-        <div>
-          <h3 className="font-semibold italic mb-1">Description</h3>
-          <p className="border border-gray-300 rounded p-3">
-            {workOrder.description}
-          </p>
-        </div>
+        {workOrder.description && (
+          <div>
+            <h3 className="font-semibold italic mb-1">Description</h3>
+            <p className="border border-gray-300 rounded p-3">
+              {workOrder.description}
+            </p>
+          </div>
+        )}
 
-        {/* Equipment & Location */}
+        {/* Dynamic details grid (only render fields that are present/non-null) */}
         <div className="grid md:grid-cols-2 gap-4">
-          <div>
-            <h3 className="font-semibold italic mb-1">Machine</h3>
-            <p className="border border-gray-300 rounded p-2">
-              {workOrder.machine}
-            </p>
-          </div>
-          <div>
-            <h3 className="font-semibold italic mb-1">Location</h3>
-            <p className="border border-gray-300 rounded p-2">
-              {workOrder.location}
-            </p>
-          </div>
-        </div>
-
-        {/* People */}
-        <div className="grid md:grid-cols-2 gap-4">
-          <div>
-            <h3 className="font-semibold italic mb-1">Requested By</h3>
-            <p className="border border-gray-300 rounded p-2">
-              {workOrder.requestedBy}
-            </p>
-          </div>
-          <div>
-            <h3 className="font-semibold italic mb-1">Assigned To</h3>
-            <p className="border border-gray-300 rounded p-2">
-              {workOrder.assignedTo}
-            </p>
-          </div>
-        </div>
-
-        {/* Dates */}
-        <div className="grid md:grid-cols-2 gap-4">
-          <div>
-            <h3 className="font-semibold italic mb-1">Created At</h3>
-            <p className="border border-gray-300 rounded p-2">
-              {formatDate(workOrder.createdAt)}
-            </p>
-          </div>
-          <div>
-            <h3 className="font-semibold italic mb-1">Due Date</h3>
-            <p className="border border-gray-300 rounded p-2">
-              {formatDate(workOrder.dueDate)}
-            </p>
-          </div>
-          {workOrder.completedAt && (
-            <div>
-              <h3 className="font-semibold italic mb-1">Completed At</h3>
-              <p className="border border-gray-300 rounded p-2">
-                {formatDate(workOrder.completedAt)}
-              </p>
-            </div>
+          {fields.map(
+            (field) =>
+              workOrder[field.key] !== undefined &&
+              workOrder[field.key] !== null &&
+              // skip empty strings
+              (typeof workOrder[field.key] !== "string" ||
+                workOrder[field.key].trim() !== "") && (
+                <div key={field.key}>
+                  <h3 className="font-semibold italic mb-1">{field.label}</h3>
+                  <p className="border border-gray-300 rounded p-2">
+                    {field.isDate
+                      ? formatDate(workOrder[field.key])
+                      : workOrder[field.key]}
+                  </p>
+                </div>
+              )
           )}
-          <div>
-            <h3 className="font-semibold italic mb-1">Next Service</h3>
-            <p className="border border-gray-300 rounded p-2">
-              {formatDate(workOrder.nextServiceDate)}
-            </p>
-          </div>
         </div>
       </div>
     </div>

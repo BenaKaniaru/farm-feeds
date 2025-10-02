@@ -49,7 +49,7 @@ export const workOrders = [
     createdAt: "2025-10-01",
     startedon: "2025-07-28",
     completedon: "2025-07-28",
-    nextServiceDate: null,
+    nextServiceDate: "2026-07-28",
   },
   {
     id: 4,
@@ -68,7 +68,7 @@ export const workOrders = [
     createdAt: "2025-10-01",
     startedon: "2025-07-31",
     completedon: "2025-07-31",
-    nextServiceDate: null,
+    nextServiceDate: "2026-02-31",
   },
   {
     id: 5,
@@ -90,8 +90,7 @@ export const workOrders = [
   },
   {
     id: 6,
-    title:
-      "Replacement of a faulty limit switch at the small bagging scale",
+    title: "Replacement of a faulty limit switch at the small bagging scale",
     description:
       "The small scale in the bagging area was not discharging the finished products as required, due to the limit switch failure to send a discharge signal. To fix the problem, the switch with another one cannibalized from an existing divertor at the store, that was not in use.",
     machine: "Bagging Smale Scale",
@@ -105,10 +104,11 @@ export const workOrders = [
     startedon: "2025-08-01",
     completedon: "2025-08-01",
     nextServiceDate: null,
-  }, {
-  id: 5,
+  },
+  {
+    id: 7,
     title:
-      "Repair of the pneumatic divertor at the inlet of the hammer mill bins",
+      "Replacement of a faulty contactor for sewing machine at the big bagging scale",
     description:
       "The divertor gate had wornout, leading to the leakage of materials into the unittended bin. The gate was extracted and metal sheet precisily cut into the appropriate size and welded in place to cover the wornout area, thus preventing material leak.",
     machine: "Hammer mill pneumatic gate distributor",
@@ -122,5 +122,57 @@ export const workOrders = [
     startedon: "2025-07-31",
     completedon: "2025-07-31",
     nextServiceDate: null,
-  }
+  },
+
+  {
+    id: 8,
+    title: "Scheduled Lubrication of Conveyor Bearings",
+    description:
+      "Routine lubrication for the conveyor line bearings to minimize wear.",
+    machine: "Main Conveyor Line",
+    location: "Plant's +10m level",
+    priority: "medium",
+    status: "upcoming",
+    activityType: "Preventive Maintenance",
+    projectLead: "Patrick",
+    attendedby: "Maintenance Team",
+    createdAt: "2025-09-28",
+    dueDate: "2025-10-08", // Scheduled for future
+    completedon: null,
+    nextServiceDate: null,
+  },
+  {
+    id: 9,
+    title: "Inspection of Molasses Pump Seal",
+    description:
+      "Pump seal inspection and replacement if necessary, to prevent leakages.",
+    machine: "Molasses Transfer Pump",
+    location: "Plant’s Pump House",
+    priority: "high",
+    status: "upcoming",
+    activityType: "Routine Maintenance",
+    projectLead: "Isaac",
+    attendedby: "Inspection Team",
+    createdAt: "2025-09-30",
+    dueDate: "2025-10-05", // Future scheduled inspection
+    completedon: null,
+    nextServiceDate: null,
+  },
+  {
+    id: 10,
+    title: "Repair of Pellet Mill Feeder Motor",
+    description:
+      "Pellet mill feeder motor had overheating issues due to faulty cooling fan.",
+    machine: "Pellet Mill",
+    location: "Plant's +15m level",
+    priority: "high",
+    status: "overdue",
+    activityType: "Corrective Maintenance",
+    projectLead: "George",
+    attendedby: "Electrical Team",
+    createdAt: "2025-09-15",
+    dueDate: "2025-09-20", // Missed deadline → overdue
+    completedon: null,
+    nextServiceDate: null,
+  },
 ];

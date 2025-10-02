@@ -13,12 +13,26 @@ export default function Dashboard() {
   const { activities } = useContext(AppContext);
   const navigate = useNavigate();
 
+  // Normalize statuses to lowercase for consistency
+  const normalizedActivities = activities.map((a) => ({
+    ...a,
+    status: a.status ? a.status.toString().toLowerCase() : "",
+  }));
+
   // derive totals
-  const total = activities.length;
-  const completed = activities.filter((a) => a.status === "completed").length;
-  const ongoing = activities.filter((a) => a.status === "ongoing").length;
-  const upcoming = activities.filter((a) => a.status === "upcoming").length;
-  const overdue = activities.filter((a) => a.status === "overdue").length;
+  const total = normalizedActivities.length;
+  const completed = normalizedActivities.filter(
+    (a) => a.status === "completed"
+  ).length;
+  const ongoing = normalizedActivities.filter(
+    (a) => a.status === "ongoing"
+  ).length;
+  const upcoming = normalizedActivities.filter(
+    (a) => a.status === "upcoming"
+  ).length;
+  const overdue = normalizedActivities.filter(
+    (a) => a.status === "overdue"
+  ).length;
 
   const handleNavigate = (status) => {
     if (status === "all") {

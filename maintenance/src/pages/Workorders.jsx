@@ -14,7 +14,7 @@ export default function Workorders() {
   const [sortOrder, setSortOrder] = useState("latest");
   const [searchQuery, setSearchQuery] = useState("");
 
-  // 🔹 When statusFilter changes, update query string
+  // 🔹 Update query string when status changes
   const updateFilter = (value) => {
     setStatusFilter(value);
     const params = new URLSearchParams(location.search);
@@ -26,7 +26,7 @@ export default function Workorders() {
     navigate({ search: params.toString() }, { replace: true });
   };
 
-  // 🔹 Format relative dates (±6 days relative, otherwise absolute)
+  // 🔹 Format relative dates
   const formatRelativeDate = (dateString) => {
     if (!dateString) return "N/A";
     const date = new Date(dateString);
@@ -50,7 +50,11 @@ export default function Workorders() {
   const filteredOrders = useMemo(() => {
     return activities
       .filter((wo) => {
-        if (statusFilter !== "all" && wo.status !== statusFilter) return false;
+        if (
+          statusFilter !== "all" &&
+          wo.status.toLowerCase() !== statusFilter.toLowerCase()
+        )
+          return false;
         const q = searchQuery.toLowerCase();
         return (
           wo.title.toLowerCase().includes(q) ||
@@ -69,7 +73,7 @@ export default function Workorders() {
 
   // 🔹 Status color codes
   const getStatusClass = (status) => {
-    switch (status) {
+    switch (status.toLowerCase()) {
       case "completed":
         return "text-green-600";
       case "ongoing":
@@ -81,6 +85,35 @@ export default function Workorders() {
       default:
         return "text-gray-600";
     }
+  };
+
+  // 🔹 Date selection logic
+  const getDateInfo = (wo) => {
+    let label = "Created At";
+    let value = wo.createdAt;
+    let extraClass = "";
+
+    if (wo.status.toLowerCase() === "completed") {
+      if (
+        wo.activityType?.toLowerCase().includes("corrective") ||
+        wo.activityType?.toLowerCase().includes("preventive")
+      ) {
+        label = "Completion Date";
+        value = wo.completedon;
+      } else if (wo.activityType?.toLowerCase().includes("routine")) {
+        label = "Next Service/Inspection";
+        value = wo.nextServiceDate;
+      }
+    } else if (wo.status.toLowerCase() === "upcoming") {
+      label = "Scheduled Date";
+      value = wo.dueDate;
+    } else if (wo.status.toLowerCase() === "overdue") {
+      label = "⚠️ Overdue";
+      value = wo.dueDate;
+      extraClass = "text-red-600 font-bold";
+    }
+
+    return { label, value, extraClass };
   };
 
   const handleOrderClick = (id) => {
@@ -129,32 +162,7 @@ export default function Workorders() {
           <p>No work orders found.</p>
         ) : (
           filteredOrders.map((wo) => {
-            let dateLabel,
-              dateValue,
-              extraClass = "";
-
-            switch (wo.status) {
-              case "completed":
-                dateLabel = "Next Service/Inspection";
-                dateValue = wo.nextServiceDate;
-                break;
-              case "ongoing":
-                dateLabel = "Due Date";
-                dateValue = wo.dueDate;
-                break;
-              case "upcoming":
-                dateLabel = "Scheduled Date";
-                dateValue = wo.dueDate;
-                break;
-              case "overdue":
-                dateLabel = "⚠️ Overdue";
-                dateValue = wo.dueDate;
-                extraClass = "text-red-600 font-bold";
-                break;
-              default:
-                dateLabel = "Created At";
-                dateValue = wo.createdAt;
-            }
+            const { label, value, extraClass } = getDateInfo(wo);
 
             return (
               <div
@@ -175,7 +183,7 @@ export default function Workorders() {
                   </span>
                 </p>
                 <p className={`text-xs mt-1 ${extraClass}`}>
-                  {dateLabel}: {formatRelativeDate(dateValue)}
+                  {label}: {formatRelativeDate(value)}
                 </p>
               </div>
             );
@@ -206,32 +214,7 @@ export default function Workorders() {
               </tr>
             ) : (
               filteredOrders.map((wo, index) => {
-                let dateLabel,
-                  dateValue,
-                  extraClass = "";
-
-                switch (wo.status) {
-                  case "completed":
-                    dateLabel = "Next Service/Inspection";
-                    dateValue = wo.nextServiceDate;
-                    break;
-                  case "ongoing":
-                    dateLabel = "Due Date";
-                    dateValue = wo.dueDate;
-                    break;
-                  case "upcoming":
-                    dateLabel = "Scheduled Date";
-                    dateValue = wo.dueDate;
-                    break;
-                  case "overdue":
-                    dateLabel = "Overdue";
-                    dateValue = wo.dueDate;
-                    extraClass = "text-red-600 font-bold";
-                    break;
-                  default:
-                    dateLabel = "Created At";
-                    dateValue = wo.createdAt;
-                }
+                const { label, value, extraClass } = getDateInfo(wo);
 
                 return (
                   <tr
@@ -254,7 +237,7 @@ export default function Workorders() {
                     </td>
                     <td className="px-4 py-2">{wo.activityType}</td>
                     <td className={`px-4 py-2 ${extraClass}`}>
-                      {dateLabel}: {formatRelativeDate(dateValue)}
+                      {label}: {formatRelativeDate(value)}
                     </td>
                   </tr>
                 );
