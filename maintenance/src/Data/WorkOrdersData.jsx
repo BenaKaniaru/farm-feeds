@@ -60,8 +60,6 @@ export const workOrders = [
     priority: "high",
     status: "completed",
     activityType: "Routine Maintenance",
-    machine: "New Conveyor Belt System",
-    location: "Plant's 0m level, from the bagging area",
     projectLead: "Martin Kimani",
     attendedby: "Maintenance Team & Contracted Service Team",
     createdAt: "2025-10-01",
