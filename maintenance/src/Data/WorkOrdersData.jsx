@@ -178,7 +178,8 @@ export const workOrders = [
 
   {
     id: 11,
-    title: "Servicing and Replacement of the Pneumatic Cylinder at the Main Bagging Scale",
+    title:
+      "Servicing and Replacement of the Pneumatic Cylinder at the Main Bagging Scale",
     description:
       "A new set of grooved v-belts was put in place, following the complete wear and tear of the old set during production.",
     machine: "Main compressor",
@@ -192,6 +193,81 @@ export const workOrders = [
     createdAt: "2025-09-15",
     startedon: "2025-08-09",
     completedon: "2025-08-09",
+    nextServiceDate: null,
+  },
+
+  {
+    id: 12,
+    title: "Changing of nylon shafts on intake 1 chain conveyor",
+    description:
+      "The nylon shafts on which the conveyor's chain drag on had excessively worn out due to friction and had to be replaced, to eradicate unnecessary vibrations and noise on the machine.",
+    machine: "Intake 1 chain conveyor",
+    location: "Plant's -5m level",
+    priority: "high",
+    status: "completed",
+    activityType: "Corrective Maintenance",
+    projectLead: "Martin Kimani",
+    attendedby: "Maintenance team",
+    createdAt: "2025-10-09",
+    startedon: "2025-08-15",
+    completedon: "2025-08-16",
+    nextServiceDate: null,
+  },
+
+  {
+    id: 13,
+    title: "Changing of hammer mill beaters",
+    description:
+      "The hammer mill beaters were due for replacement as they had worn out hence impairing their effectiveness in the milling of various raw materials.",
+    machine: "Hammer mill",
+    location: "Plant's 0m level",
+    priority: "high",
+    status: "completed",
+    activityType: "Routine Maintenance",
+    projectLead: "Martin Kimani",
+    attendedby:
+      "Martin Kimani, Francis Njiraini, Christopher Thuo, George Kimani, and James Njonge",
+    createdAt: "2025-10-11",
+    startedon: "2025-08-27",
+    completedon: "2025-08-27",
+    nextServiceDate: null,
+  },
+
+  {
+    id: 14,
+    title: "Cleaning of fuel filters on the boiler",
+    description:
+      "Following the switch from the use of industrial diesel oil (IDO) to the use of regular diesel in the boiler, there was a need for proper cleaning of the filters",
+    machine: "Boiler",
+    location: "Boiler room",
+    priority: "Medium",
+    status: "completed",
+    activityType: "Corrective Maintenance",
+    projectLead: "Martin Kimani",
+    attendedby: "Isaac Izoberi, James Njonge",
+    createdAt: "2025-10-12",
+    startedon: "2025-08-29",
+    completedon: "2025-08-29",
+    nextServiceDate: null,
+  },
+
+  {
+    id: 15,
+    title:
+      "Repair of an oil leak at the hoist.",
+    description:
+      "The hoist's gear box cover had a small crack that caused leakage of the lubricating oil, thus causing the gear's to dry run and produce excessive friction and noise. To address the issue, the gearbox had to be assembled and the cracked area repaired using liguid iron metal, the worn out bearings replaced, and the oil refilled.",
+    machine: "Hoist",
+    location: "Plant's +32m level",
+    priority: "high",
+    status: "completed",
+    activityType: "Corrective Maintenance",
+    projectLead: "Patrick Muiruri",
+    attendedby:
+      "Maintenance Team",
+    createdAt: "2025-10-15",
+    startedon: "2025-09-13",
+    completedon: "2025-09-15",
     nextServiceDate: null,
   },
 ];
