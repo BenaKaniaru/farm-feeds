@@ -105,8 +105,8 @@ export default function Workorders() {
         value = wo.nextServiceDate;
       }
     } else if (wo.status.toLowerCase() === "upcoming") {
-      label = "Scheduled Date";
-      value = wo.dueDate;
+      label = "Scheduled Start Date";
+      value = wo.scheduledStartDate;
     } else if (wo.status.toLowerCase() === "overdue") {
       label = "⚠️ Overdue";
       value = wo.dueDate;

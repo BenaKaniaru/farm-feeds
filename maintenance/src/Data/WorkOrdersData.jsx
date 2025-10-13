@@ -44,7 +44,7 @@ export const workOrders = [
     status: "completed",
     activityType: "Routine Maintenance",
     projectLead: "Martin",
-    attendedby: "Martin Kimani and Patrick Muiruri",
+    attendedby: ["Martin Kimani", "Patrick Muiruri"],
     createdAt: "2025-09-30",
     startedon: "2025-07-28",
     completedon: "2025-07-28",
@@ -79,7 +79,7 @@ export const workOrders = [
     status: "Completed",
     activityType: "Corrective Maintenance",
     projectLead: "Martin Kimani",
-    attendedby: "Isaac Izoberi and Charles Ochieng'",
+    attendedby: ["Isaac Izoberi", "Charles Ochieng'"],
     createdAt: "2025-10-02",
     startedon: "2025-07-31",
     completedon: "2025-07-31",
@@ -96,7 +96,7 @@ export const workOrders = [
     status: "Completed",
     activityType: "Corrective Maintenance",
     projectLead: "Patrick Muiruri",
-    attendedby: "Patrick Muiruri and George Kimani",
+    attendedby: ["Patrick Muiruri", "George Kimani"],
     createdAt: "2025-10-03",
     startedon: "2025-08-01",
     completedon: "2025-08-01",
@@ -114,7 +114,7 @@ export const workOrders = [
     status: "Completed",
     activityType: "Corrective Maintenance",
     projectLead: "George Kimani",
-    attendedby: "George Kimani, Benard Kaniaru, and Patrick Muiruri'",
+    attendedby: ["George Kimani", "Benard Kaniaru", "Patrick Muiruri"],
     createdAt: "2025-10-04",
     startedon: "2025-08-04",
     completedon: "2025-08-04",
@@ -151,7 +151,7 @@ export const workOrders = [
     activityType: "Corrective Maintenance",
     projectLead: "George Kimani",
     attendedby:
-      "George Kimani, Patrick Muiruri, Benard Kaniaru, and James Njonge",
+      ["George Kimani", "Patrick Muiruri", "Benard Kaniaru", "James Njonge"],
     createdAt: "2025-10-06",
     startedon: "2025-08-06",
     completedon: "2025-08-06",
@@ -169,14 +169,14 @@ export const workOrders = [
     activityType: "Corrective Maintenance",
     projectLead: "Martin Kimani",
     attendedby:
-      "Martin Kimani, Francis Njiraini, Peter Wachira, and Hillary Wanjala",
+      ["Martin Kimani", "Francis Njiraini", "Peter Wachira", "Hillary Wanjala"],
     createdAt: "2025-10-07",
     startedon: "2025-08-09",
     completedon: "2025-08-09",
     nextServiceDate: null,
   },
 
-  {
+  /*{
     id: 11,
     title:
       "Servicing and Replacement of the Pneumatic Cylinder at the Main Bagging Scale",
@@ -189,12 +189,12 @@ export const workOrders = [
     activityType: "Corrective Maintenance",
     projectLead: "Martin Kimani",
     attendedby:
-      "Martin Kimani, Francis Njiraini, Peter Wachira, and Hillary Wanjala",
+      ["Martin Kimani", "Francis Njiraini", "Peter Wachira", "Hillary Wanjala"],
     createdAt: "2025-10-08",
     startedon: "2025-08-09",
     completedon: "2025-08-09",
     nextServiceDate: null,
-  },
+  },*/
 
   {
     id: 12,
@@ -226,7 +226,7 @@ export const workOrders = [
     activityType: "Routine Maintenance",
     projectLead: "Martin Kimani",
     attendedby:
-      "Martin Kimani, Francis Njiraini, Christopher Thuo, George Kimani, and James Njonge",
+      ["Martin Kimani", "Francis Njiraini", "Christopher Thuo", "George Kimani", "James Njonge"],
     createdAt: "2025-10-11",
     startedon: "2025-08-27",
     completedon: "2025-08-27",
@@ -244,7 +244,7 @@ export const workOrders = [
     status: "completed",
     activityType: "Corrective Maintenance",
     projectLead: "Martin Kimani",
-    attendedby: "Isaac Izoberi, James Njonge",
+    attendedby: ["Isaac Izoberi", "James Njonge"],
     createdAt: "2025-10-12",
     startedon: "2025-08-29",
     completedon: "2025-08-29",
@@ -253,8 +253,7 @@ export const workOrders = [
 
   {
     id: 15,
-    title:
-      "Repair of an oil leak at the hoist.",
+    title: "Repair of an oil leak at the hoist.",
     description:
       "The hoist's gear box cover had a small crack that caused leakage of the lubricating oil, thus causing the gear's to dry run and produce excessive friction and noise. To address the issue, the gearbox had to be disassembled and the cracked area repaired using liguid iron metal, the worn out bearings replaced, and the oil refilled.",
     machine: "Hoist",
@@ -263,11 +262,65 @@ export const workOrders = [
     status: "completed",
     activityType: "Corrective Maintenance",
     projectLead: "Patrick Muiruri",
-    attendedby:
-      "Maintenance Team",
+    attendedby: "Maintenance Team",
     createdAt: "2025-10-15",
     startedon: "2025-09-13",
     completedon: "2025-09-15",
     nextServiceDate: null,
+  },
+
+  {
+    id: 16,
+    title: "Boiler de-sooting and de-scaling",
+    description:
+      "Project is part of the boiler's routine maintenance, where the internal surfaces of the boiler's furnace and flue gas passeges are cleaned to remove soot and scale buildup thus enhancing the boiler's thermal efficiency by improving heat transfer",
+    machine: "Boiler",
+    location: "Boiler Room",
+    priority: "high",
+    status: "upcoming",
+    activityType: "Routine Maintenance",
+    projectLead: "George Kimani",
+    assignedPersonnel: "Not Assigned",
+    createdAt: "2025-10-15",
+    scheduledStartDate: "2025-10-13",
+    workDaysExpected: "4 days",
+    numberOfPersonellRequired: 4,
+    requiredMaterials: ["Descaling chemicals", "Inhibitor", "Neutralizer", "Metallic gasket", "Tape gasket", "Rope gasket", "Nozzles", "Tube brush", "Wire brush", "Consumables"],
+  },
+
+  {
+    id: 17,
+    title: "Fabrication and installation of canopies at the go-down entrances",
+    description:
+      "The project involves the fabrication and installation of canopies at the go-down entrances to facilitate the loading of finished products and offloading of raw materials during rainy conditions. The canopies will provide weather protection, minimize material handling interruptions, and improve overall operational efficiency.",
+    machine: "N/A",
+    location: "Plant Go-down Entrances",
+    priority: "high",
+    status: "ongoing",
+    activityType: "Welding and Fabrication",
+    projectLead: "George Kimani",
+    assignedPersonnel: ["Charles Ochieng'", "Isaac Izoberi", "Griffin Kipkemoi"],
+    createdAt: "2025-10-12",
+    startedOn: "N/A",
+    expectedCompletionDate: "2025-10-21",
+  },
+
+  {
+    id: 18,
+    title: "Building of the maintenance workshop",
+    description:
+      "Project is part of the boiler's routine maintenance, where the internal surfaces of the boiler's furnace and flue gas passeges are cleaned to remove soot and scale buildup thus enhancing the boiler's thermal efficiency by improving heat transfer",
+    machine: "N/A",
+    location: "Utility area behind the powerhouse",
+    priority: "high",
+    status: "upcoming",
+    activityType: "Welding and Fabrication",
+    projectLead: "George Kimani",
+    assignedPersonnel: "Not assigned",
+    createdAt: "2025-10-16",
+    scheduledStartDate: "2025-10-13",
+    workDaysExpected: "30 days",
+    numberOfPersonellRequired: 4,
+    requiredMaterials: ["Iron sheets 2m- Green - 14pcs", "Iron sheets 3m Green - 13pcs", "Iron sheets 2.5m - Grey -10pcs", "RHS 3 by 2 - 8pcs", "RHS 2 by 2 - 10pcs", "wire mesh (heavy gauge) - 5pcs"]
   },
 ];

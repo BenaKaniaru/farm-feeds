@@ -11,7 +11,7 @@ export default function WorkOrderDetail() {
 
   // Format date helper
   const formatDate = (dateStr) => {
-    if (!dateStr) return "—";
+    if (!dateStr || dateStr === "N/A") return "—";
     try {
       return new Intl.DateTimeFormat("en-US", {
         year: "numeric",
@@ -23,7 +23,6 @@ export default function WorkOrderDetail() {
     }
   };
 
-  // Badge styling (use lowercase keys)
   const badgeClasses = {
     priority: {
       low: "bg-green-100 text-green-700",
@@ -38,21 +37,79 @@ export default function WorkOrderDetail() {
     },
   };
 
-  // Fields to show (createdAt removed by request)
-  const fields = [
-    { key: "machine", label: "Machine" },
-    { key: "location", label: "Location" },
-    { key: "activityType", label: "Activity Type" },
-    { key: "projectLead", label: "Project Lead" },
-    { key: "attendedby", label: "Attended By" },
-    { key: "startedon", label: "Started On", isDate: true },
-    { key: "dueDate", label: "Due Date", isDate: true },
-    { key: "completedon", label: "Completed On", isDate: true },
-    { key: "nextServiceDate", label: "Next Service", isDate: true },
-  ];
+  const statusKey = (workOrder.status || "").toLowerCase();
+  const priorityKey = (workOrder.priority || "").toLowerCase();
 
-  const statusKey = (workOrder.status || "").toString().toLowerCase();
-  const priorityKey = (workOrder.priority || "").toString().toLowerCase();
+  // Conditional fields per status
+  let fields = [];
+
+  if (statusKey === "ongoing") {
+    fields = [
+      { key: "projectLead", label: "Project Lead" },
+      { key: "assignedPersonnel", label: "Assigned Personnel" },
+      { key: "startedOn", label: "Started On", isDate: true },
+      {
+        key: "expectedCompletionDate",
+        label: "Expected Completion",
+        isDate: true,
+      },
+    ];
+  } else if (statusKey === "upcoming") {
+    fields = [
+      { key: "projectLead", label: "Project Lead" },
+      { key: "assignedPersonnel", label: "Assigned Personnel" },
+      { key: "scheduledStartDate", label: "Scheduled Start", isDate: true },
+      { key: "workDaysExpected", label: "Work Duration" },
+      { key: "numberOfPersonellRequired", label: "Personnel Required" },
+      { key: "requiredMaterials", label: "Required Materials" },
+    ];
+  } else {
+    // Default fallback fields for other statuses (e.g., completed)
+    fields = [
+      { key: "machine", label: "Machine" },
+      { key: "location", label: "Location" },
+      { key: "activityType", label: "Activity Type" },
+      { key: "projectLead", label: "Project Lead" },
+      { key: "attendedby", label: "Attended By" },
+      { key: "startedon", label: "Started On", isDate: true },
+      { key: "dueDate", label: "Due Date", isDate: true },
+      { key: "completedon", label: "Completed On", isDate: true },
+      { key: "nextServiceDate", label: "Next Service", isDate: true },
+    ];
+  }
+
+  const renderValue = (fieldKey, value) => {
+    if (Array.isArray(value)) {
+      // For Assigned Personnel → ordered list
+      if (fieldKey === "assignedPersonnel" || fieldKey === "attendedby") {
+        return (
+          <ol className="list-decimal list-inside space-y-1">
+            {value.map((person, index) => (
+              <li key={index}>{person}</li>
+            ))}
+          </ol>
+        );
+      }
+
+      // For Required Materials → unordered list
+      if (fieldKey === "requiredMaterials") {
+        return (
+          <ul className="list-disc list-inside space-y-1">
+            {value.map((mat, index) => (
+              <li key={index}>{mat}</li>
+            ))}
+          </ul>
+        );
+      }
+    }
+
+    // Handle simple text or dates
+    if (typeof value === "string" || typeof value === "number") {
+      return <p>{value}</p>;
+    }
+
+    return value;
+  };
 
   return (
     <div className="p-6">
@@ -83,7 +140,6 @@ export default function WorkOrderDetail() {
                 Priority: {workOrder.priority}
               </span>
             )}
-
             {workOrder.status && (
               <span
                 className={`px-3 py-1 text-sm rounded-full ${
@@ -93,8 +149,6 @@ export default function WorkOrderDetail() {
                 Status: {workOrder.status}
               </span>
             )}
-
-            {/* Activity Type shown as a pill for visibility */}
             {workOrder.activityType && (
               <span className="px-3 py-1 text-sm rounded-full bg-slate-100 text-slate-800">
                 Type: {workOrder.activityType}
@@ -113,22 +167,21 @@ export default function WorkOrderDetail() {
           </div>
         )}
 
-        {/* Dynamic details grid (only render fields that are present/non-null) */}
+        {/* Dynamic fields */}
         <div className="grid md:grid-cols-2 gap-4">
           {fields.map(
             (field) =>
               workOrder[field.key] !== undefined &&
               workOrder[field.key] !== null &&
-              // skip empty strings
               (typeof workOrder[field.key] !== "string" ||
                 workOrder[field.key].trim() !== "") && (
                 <div key={field.key}>
                   <h3 className="font-semibold italic mb-1">{field.label}</h3>
-                  <p className="border border-gray-300 rounded p-2">
+                  <div className="border border-gray-300 rounded p-2">
                     {field.isDate
                       ? formatDate(workOrder[field.key])
-                      : workOrder[field.key]}
-                  </p>
+                      : renderValue(field.key, workOrder[field.key])}
+                  </div>
                 </div>
               )
           )}
