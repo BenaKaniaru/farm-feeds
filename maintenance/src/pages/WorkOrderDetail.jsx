@@ -53,6 +53,7 @@ export default function WorkOrderDetail() {
         label: "Expected Completion",
         isDate: true,
       },
+      { key: "statusReport", label: "Status Report" },
     ];
   } else if (statusKey === "upcoming") {
     fields = [
@@ -62,9 +63,10 @@ export default function WorkOrderDetail() {
       { key: "workDaysExpected", label: "Work Duration" },
       { key: "numberOfPersonellRequired", label: "Personnel Required" },
       { key: "requiredMaterials", label: "Required Materials" },
+      { key: "statusReport", label: "Status Report" },
     ];
   } else {
-    // Default fallback fields for other statuses (e.g., completed)
+    // Default fallback for completed or other statuses
     fields = [
       { key: "machine", label: "Machine" },
       { key: "location", label: "Location" },
@@ -77,39 +79,6 @@ export default function WorkOrderDetail() {
       { key: "nextServiceDate", label: "Next Service", isDate: true },
     ];
   }
-
-  const renderValue = (fieldKey, value) => {
-    if (Array.isArray(value)) {
-      // For Assigned Personnel → ordered list
-      if (fieldKey === "assignedPersonnel" || fieldKey === "attendedby") {
-        return (
-          <ol className="list-decimal list-inside space-y-1">
-            {value.map((person, index) => (
-              <li key={index}>{person}</li>
-            ))}
-          </ol>
-        );
-      }
-
-      // For Required Materials → unordered list
-      if (fieldKey === "requiredMaterials") {
-        return (
-          <ul className="list-disc list-inside space-y-1">
-            {value.map((mat, index) => (
-              <li key={index}>{mat}</li>
-            ))}
-          </ul>
-        );
-      }
-    }
-
-    // Handle simple text or dates
-    if (typeof value === "string" || typeof value === "number") {
-      return <p>{value}</p>;
-    }
-
-    return value;
-  };
 
   return (
     <div className="p-6">
@@ -128,7 +97,6 @@ export default function WorkOrderDetail() {
         {/* Title + Badges */}
         <div>
           <h2 className="text-xl font-bold">{workOrder.title}</h2>
-
           <div className="flex flex-wrap gap-2 mt-2">
             {workOrder.priority && (
               <span
@@ -167,24 +135,40 @@ export default function WorkOrderDetail() {
           </div>
         )}
 
-        {/* Dynamic fields */}
+        {/* Dynamic Fields */}
         <div className="grid md:grid-cols-2 gap-4">
-          {fields.map(
-            (field) =>
-              workOrder[field.key] !== undefined &&
-              workOrder[field.key] !== null &&
-              (typeof workOrder[field.key] !== "string" ||
-                workOrder[field.key].trim() !== "") && (
-                <div key={field.key}>
-                  <h3 className="font-semibold italic mb-1">{field.label}</h3>
-                  <div className="border border-gray-300 rounded p-2">
-                    {field.isDate
-                      ? formatDate(workOrder[field.key])
-                      : renderValue(field.key, workOrder[field.key])}
-                  </div>
-                </div>
-              )
-          )}
+          {fields.map((field) => {
+            const value = workOrder[field.key];
+
+            if (value === undefined || value === null || value === "")
+              return null;
+
+            return (
+              <div key={field.key}>
+                <h3 className="font-semibold italic mb-1">{field.label}</h3>
+
+                {/* Render Ordered List for Assigned Personnel */}
+                {field.key === "assignedPersonnel" && Array.isArray(value) ? (
+                  <ol className="border border-gray-300 rounded p-3 list-decimal list-inside">
+                    {value.map((person, idx) => (
+                      <li key={idx}>{person}</li>
+                    ))}
+                  </ol>
+                ) : /* Render Unordered List for Required Materials */ field.key ===
+                    "requiredMaterials" && Array.isArray(value) ? (
+                  <ul className="border border-gray-300 rounded p-3 list-disc list-inside">
+                    {value.map((material, idx) => (
+                      <li key={idx}>{material}</li>
+                    ))}
+                  </ul>
+                ) : (
+                  <p className="border border-gray-300 rounded p-2">
+                    {field.isDate ? formatDate(value) : value}
+                  </p>
+                )}
+              </div>
+            );
+          })}
         </div>
       </div>
     </div>

@@ -286,6 +286,8 @@ export const workOrders = [
     workDaysExpected: "4 days",
     numberOfPersonellRequired: 4,
     requiredMaterials: ["Descaling chemicals", "Inhibitor", "Neutralizer", "Metallic gasket", "Tape gasket", "Rope gasket", "Nozzles", "Tube brush", "Wire brush", "Consumables"],
+    statusReport: "Project approved and set to begin"
+
   },
 
   {
@@ -300,9 +302,10 @@ export const workOrders = [
     activityType: "Welding and Fabrication",
     projectLead: "George Kimani",
     assignedPersonnel: ["Charles Ochieng'", "Isaac Izoberi", "Griffin Kipkemoi"],
-    createdAt: "2025-10-12",
+    createdAt: "2025-10-1",
     startedOn: "N/A",
     expectedCompletionDate: "2025-10-21",
+    statusReport: "First canopy complete, second canopy is currently in the roofing face and is expected to be completed by Thursady, 16-10-2025, the third and final canopy is expected to begin thereafter."
   },
 
   {
@@ -321,6 +324,7 @@ export const workOrders = [
     scheduledStartDate: "2025-10-13",
     workDaysExpected: "30 days",
     numberOfPersonellRequired: 4,
-    requiredMaterials: ["Iron sheets 2m- Green - 14pcs", "Iron sheets 3m Green - 13pcs", "Iron sheets 2.5m - Grey -10pcs", "RHS 3 by 2 - 8pcs", "RHS 2 by 2 - 10pcs", "wire mesh (heavy gauge) - 5pcs"]
+    requiredMaterials: ["Iron sheets 2m- Green - 14pcs", "Iron sheets 3m Green - 13pcs", "Iron sheets 2.5m - Grey -10pcs", "RHS 3 by 2 - 8pcs", "RHS 2 by 2 - 10pcs", "wire mesh (heavy gauge) - 5pcs"],
+    statusReport:"The support bases have been built and will cure for 21 days to achieve maximum strength. Fabrication of the workshop’s support frame will begin shortly and the frame will be assembled on site following base curing."
   },
 ];
