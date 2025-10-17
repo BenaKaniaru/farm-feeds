@@ -26,7 +26,7 @@ export default function Workorders() {
     navigate({ search: params.toString() }, { replace: true });
   };
 
-  // 🔹 Format relative dates
+  // 🔹 Format relative or absolute date
   const formatRelativeDate = (dateString) => {
     if (!dateString) return "N/A";
     const date = new Date(dateString);
@@ -87,7 +87,7 @@ export default function Workorders() {
     }
   };
 
-  // 🔹 Date selection logic
+  // 🔹 Date display logic
   const getDateInfo = (wo) => {
     let label = "Created At";
     let value = wo.createdAt;
@@ -103,6 +103,25 @@ export default function Workorders() {
       } else if (wo.activityType?.toLowerCase().includes("routine")) {
         label = "Next Service/Inspection";
         value = wo.nextServiceDate;
+      }
+    } else if (wo.status.toLowerCase() === "ongoing") {
+      label = "Expected Completion";
+
+      // Use the stored expectedCompletionDate if available, otherwise calculate it
+      if (wo.expectedCompletionDate) {
+        value = wo.expectedCompletionDate;
+      } else if (wo.scheduledStartDate && wo.workDaysExpected) {
+        const start = new Date(wo.scheduledStartDate);
+        const days = parseInt(wo.workDaysExpected);
+        if (!isNaN(days)) {
+          const expectedCompletion = new Date(start);
+          expectedCompletion.setDate(start.getDate() + days);
+          value = expectedCompletion.toISOString().split("T")[0];
+        } else {
+          value = "N/A";
+        }
+      } else {
+        value = "N/A";
       }
     } else if (wo.status.toLowerCase() === "upcoming") {
       label = "Scheduled Start Date";
@@ -163,7 +182,6 @@ export default function Workorders() {
         ) : (
           filteredOrders.map((wo) => {
             const { label, value, extraClass } = getDateInfo(wo);
-
             return (
               <div
                 key={wo.id}
@@ -215,7 +233,6 @@ export default function Workorders() {
             ) : (
               filteredOrders.map((wo, index) => {
                 const { label, value, extraClass } = getDateInfo(wo);
-
                 return (
                   <tr
                     key={wo.id}

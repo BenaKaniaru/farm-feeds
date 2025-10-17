@@ -282,11 +282,11 @@ export const workOrders = [
     projectLead: "George Kimani",
     assignedPersonnel: "Not Assigned",
     createdAt: "2025-10-15",
-    scheduledStartDate: "2025-10-13",
+    scheduledStartDate: "2025-10-21",
     workDaysExpected: "4 days",
     numberOfPersonellRequired: 4,
     requiredMaterials: ["Descaling chemicals", "Inhibitor", "Neutralizer", "Metallic gasket", "Tape gasket", "Rope gasket", "Nozzles", "Tube brush", "Wire brush", "Consumables"],
-    statusReport: "Project approved and set to begin"
+    statusReport: "Project approved and set to be done next week"
 
   },
 
@@ -304,8 +304,8 @@ export const workOrders = [
     assignedPersonnel: ["Charles Ochieng'", "Isaac Izoberi", "Griffin Kipkemoi"],
     createdAt: "2025-10-1",
     startedOn: "N/A",
-    expectedCompletionDate: "2025-10-21",
-    statusReport: "First canopy complete, second canopy is currently in the roofing face and is expected to be completed by Thursady, 16-10-2025, the third and final canopy is expected to begin thereafter."
+    expectedCompletionDate: "2025-10-27",
+    statusReport: "First and second canopis complete are currently complete. The building of the third and final canopy is expected to begin in the coming week."
   },
 
   {
@@ -316,15 +316,16 @@ export const workOrders = [
     machine: "N/A",
     location: "Utility area behind the powerhouse",
     priority: "high",
-    status: "upcoming",
+    status: "ongoing",
     activityType: "Welding and Fabrication",
     projectLead: "George Kimani",
     assignedPersonnel: "Not assigned",
     createdAt: "2025-10-16",
     scheduledStartDate: "2025-10-13",
+    expectedCompletionDate:"",
     workDaysExpected: "30 days",
     numberOfPersonellRequired: 4,
     requiredMaterials: ["Iron sheets 2m- Green - 14pcs", "Iron sheets 3m Green - 13pcs", "Iron sheets 2.5m - Grey -10pcs", "RHS 3 by 2 - 8pcs", "RHS 2 by 2 - 10pcs", "wire mesh (heavy gauge) - 5pcs"],
-    statusReport:"The support bases have been built and will cure for 21 days to achieve maximum strength. Fabrication of the workshop’s support frame will begin shortly and the frame will be assembled on site following base curing."
+    statusReport:"The support bases have been built and will cure for 21 days to achieve maximum strength. Fabrication of the workshop’s support frame will begin in the coming days and the frame will be assembled on site following base curing."
   },
 ];
