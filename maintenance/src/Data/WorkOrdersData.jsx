@@ -277,17 +277,17 @@ export const workOrders = [
     machine: "Boiler",
     location: "Boiler Room",
     priority: "high",
-    status: "upcoming",
+    status: "ongoing",
     activityType: "Routine Maintenance",
     projectLead: "George Kimani",
-    assignedPersonnel: "Not Assigned",
+    assignedPersonnel: "Outsourced Personnel",
     createdAt: "2025-10-15",
-    scheduledStartDate: "2025-10-21",
+    startedOn:"2025-10-21",
+    expectedCompletionDate:"2025-10-25",
     workDaysExpected: "4 days",
     numberOfPersonellRequired: 4,
     requiredMaterials: ["Descaling chemicals", "Inhibitor", "Neutralizer", "Metallic gasket", "Tape gasket", "Rope gasket", "Nozzles", "Tube brush", "Wire brush", "Consumables"],
-    statusReport: "Project approved and set to be done next week"
-
+    statusReport: "Project started as scheduled and is expected to be complete within the set timeline."
   },
 
   {

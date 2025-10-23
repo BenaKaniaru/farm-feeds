@@ -19,9 +19,9 @@ export const links = [
         to: "/work-orders",
       },
       {
-        name: "Equipment Inventory",
+        name: "Machine Inventory",
         icon: <FiPackage />,
-        to: "/equipment-inventory",
+        to: "/machine-inventory",
       },
     ],
   },
