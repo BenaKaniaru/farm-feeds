@@ -25,7 +25,7 @@ export default function MachineDetails() {
     <div className="p-4 md:p-8 bg-gray-50 min-h-screen">
       {/* Back button */}
       <button
-        onClick={() => navigate("/machines")}
+        onClick={() => navigate("/machine-inventory")}
         className="flex items-center gap-2 text-green-600 mb-6 hover:underline"
       >
         <FiArrowLeft /> Back to Inventory
@@ -72,39 +72,65 @@ export default function MachineDetails() {
           <Spec label="Current" value={machine.current} />
           <Spec label="Frequency" value={machine.frequency} />
           <Spec label="Speed (RPM)" value={machine.rpm} />
-          <Spec label="Installed Date" value={machine.installedDate} />
-          <Spec label="Last Serviced" value={machine.lastServiced} />
-          <Spec label="Next Service Due" value={machine.nextServiceDue} />
+          <Spec label="Year of Manufacture" value={machine.manufactureYear} />
+          <Spec label="Service Frequency" value={machine.serviceFrequency} />
+          <Spec label="Service Type" value={machine.serviceType} />
         </div>
       </div>
 
       {/* Accessories Section */}
       <div className="bg-white rounded-3xl shadow-md p-6 md:p-8 border border-gray-100">
-        <h2 className="text-xl font-semibold text-gray-800 mb-5 border-b pb-2">
+        <h2 className="text-xl font-semibold text-gray-800 mb-6 border-b pb-2">
           Accessories / Attachments
         </h2>
 
-        {machine.accessories.length > 0 ? (
-          <ul className="space-y-4">
+        {machine.accessories && machine.accessories.length > 0 ? (
+          <div className="flex flex-col gap-6">
             {machine.accessories.map((acc, i) => (
-              <li
+              <div
                 key={i}
-                className="bg-gray-50 rounded-xl p-4 border border-gray-100 hover:shadow transition-all"
+                className="flex flex-col bg-gradient-to-br from-white to-gray-50 border border-gray-200 rounded-2xl shadow-sm hover:shadow-md transition-all p-6"
               >
-                <p className="font-semibold text-green-700">{acc.name}</p>
-                <div className="mt-1 text-sm text-gray-600 grid grid-cols-2 md:grid-cols-3 gap-x-4 gap-y-1">
-                  {Object.entries(acc)
-                    .filter(([key]) => key !== "name")
-                    .map(([key, value]) => (
-                      <p key={key}>
-                        <span className="font-medium capitalize">{key}:</span>{" "}
-                        {value}
-                      </p>
-                    ))}
+                {/* Accessory Header */}
+                <div className="border-b border-gray-200 pb-2 mb-4">
+                  <h3 className="text-lg font-semibold text-green-700">
+                    {acc.name}
+                  </h3>
+                  {acc.type && (
+                    <p className="text-xs text-gray-500 italic">{acc.type}</p>
+                  )}
                 </div>
-              </li>
+
+                {/* Accessory Details */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-x-8 gap-y-4 text-sm text-gray-700">
+                  {Object.entries(acc)
+                    .filter(([key]) => key !== "name" && key !== "type")
+                    .map(([key, value]) => {
+                      const isNumeric =
+                        typeof value === "number" ||
+                        /^\d+(\.\d+)?$/.test(value);
+                      return (
+                        <div
+                          key={key}
+                          className="flex flex-col bg-gray-50 rounded-lg p-3 border border-gray-100"
+                        >
+                          <span className="text-gray-500 text-xs uppercase tracking-wide font-medium">
+                            {formatLabel(key)}
+                          </span>
+                          <span
+                            className={`font-medium text-gray-800 ${
+                              isNumeric ? "text-right" : "text-left"
+                            }`}
+                          >
+                            {value || "—"}
+                          </span>
+                        </div>
+                      );
+                    })}
+                </div>
+              </div>
             ))}
-          </ul>
+          </div>
         ) : (
           <p className="text-gray-500 italic">No accessories listed.</p>
         )}
@@ -123,4 +149,15 @@ function Spec({ label, value }) {
       <span className="font-medium text-gray-800">{value || "—"}</span>
     </div>
   );
+}
+
+/* Helper function to format object keys into readable labels */
+function formatLabel(key) {
+  const abbreviations = ["id", "rpm", "hp", "kw", "ph"];
+  if (abbreviations.includes(key.toLowerCase())) {
+    return key.toUpperCase();
+  }
+  return key
+    .replace(/([A-Z])/g, " $1") // Add space before capital letters
+    .replace(/^./, (str) => str.toUpperCase()); // Capitalize first letter
 }
