@@ -9,7 +9,7 @@ export default function WorkOrderDetail() {
     return <div className="p-6">Work order not found.</div>;
   }
 
-  // Format date helper
+  // 🔹 Date formatting helper
   const formatDate = (dateStr) => {
     if (!dateStr || dateStr === "N/A") return "—";
     try {
@@ -23,6 +23,7 @@ export default function WorkOrderDetail() {
     }
   };
 
+  // 🔹 Badge styling
   const badgeClasses = {
     priority: {
       low: "bg-green-100 text-green-700",
@@ -40,49 +41,28 @@ export default function WorkOrderDetail() {
   const statusKey = (workOrder.status || "").toLowerCase();
   const priorityKey = (workOrder.priority || "").toLowerCase();
 
-  // Conditional fields per status
-  let fields = [];
+  // 🔹 Keys to exclude from the dynamic display
+  const excludeKeys = [
+    "id",
+    "title",
+    "description",
+    "createdAt",
+    "priority",
+    "status",
+    "activityType",
+  ];
 
-  if (statusKey === "ongoing") {
-    fields = [
-      { key: "projectLead", label: "Project Lead" },
-      { key: "assignedPersonnel", label: "Assigned Personnel" },
-      { key: "startedOn", label: "Started On", isDate: true },
-      {
-        key: "expectedCompletionDate",
-        label: "Expected Completion",
-        isDate: true,
-      },
-      { key: "statusReport", label: "Status Report" },
-    ];
-  } else if (statusKey === "upcoming") {
-    fields = [
-      { key: "projectLead", label: "Project Lead" },
-      { key: "assignedPersonnel", label: "Assigned Personnel" },
-      { key: "scheduledStartDate", label: "Scheduled Start", isDate: true },
-      { key: "workDaysExpected", label: "Work Duration" },
-      { key: "numberOfPersonellRequired", label: "Personnel Required" },
-      { key: "requiredMaterials", label: "Required Materials" },
-      { key: "statusReport", label: "Status Report" },
-    ];
-  } else {
-    // Default fallback for completed or other statuses
-    fields = [
-      { key: "machine", label: "Machine" },
-      { key: "location", label: "Location" },
-      { key: "activityType", label: "Activity Type" },
-      { key: "projectLead", label: "Project Lead" },
-      { key: "attendedby", label: "Attended By" },
-      { key: "startedon", label: "Started On", isDate: true },
-      { key: "dueDate", label: "Due Date", isDate: true },
-      { key: "completedon", label: "Completed On", isDate: true },
-      { key: "nextServiceDate", label: "Next Service", isDate: true },
-    ];
-  }
+  // 🔹 Convert camelCase / snake_case to readable labels
+  const formatLabel = (key) => {
+    return key
+      .replace(/([A-Z])/g, " $1") // add space before capital letters
+      .replace(/_/g, " ") // replace underscores
+      .replace(/\b\w/g, (c) => c.toUpperCase()); // capitalize each word
+  };
 
   return (
     <div className="p-6">
-      {/* Back link */}
+      {/* 🔹 Back link */}
       <Link
         to="/work-orders"
         className="text-blue-600 underline mb-4 inline-block"
@@ -90,7 +70,7 @@ export default function WorkOrderDetail() {
         ← Back to Work Orders
       </Link>
 
-      {/* Header */}
+      {/* 🔹 Header */}
       <h1 className="font-bold text-2xl mb-4">Work Order #{workOrder.id}</h1>
 
       <div className="border p-6 rounded-lg shadow-md bg-white space-y-6">
@@ -125,7 +105,7 @@ export default function WorkOrderDetail() {
           </div>
         </div>
 
-        {/* Description */}
+        {/* 🔹 Description */}
         {workOrder.description && (
           <div>
             <h3 className="font-semibold italic mb-1">Description</h3>
@@ -135,40 +115,36 @@ export default function WorkOrderDetail() {
           </div>
         )}
 
-        {/* Dynamic Fields */}
+        {/* 🔹 Dynamic Fields */}
         <div className="grid md:grid-cols-2 gap-4">
-          {fields.map((field) => {
-            const value = workOrder[field.key];
+          {Object.entries(workOrder)
+            .filter(
+              ([key, value]) => !excludeKeys.includes(key) && value !== ""
+            )
+            .map(([key, value]) => (
+              <div key={key}>
+                <h3 className="font-semibold italic mb-1">
+                  {formatLabel(key)}
+                </h3>
 
-            if (value === undefined || value === null || value === "")
-              return null;
-
-            return (
-              <div key={field.key}>
-                <h3 className="font-semibold italic mb-1">{field.label}</h3>
-
-                {/* Render Ordered List for Assigned Personnel */}
-                {field.key === "assignedPersonnel" && Array.isArray(value) ? (
-                  <ol className="border border-gray-300 rounded p-3 list-decimal list-inside">
-                    {value.map((person, idx) => (
-                      <li key={idx}>{person}</li>
-                    ))}
-                  </ol>
-                ) : /* Render Unordered List for Required Materials */ field.key ===
-                    "requiredMaterials" && Array.isArray(value) ? (
+                {/* Array values (personnel, materials, etc.) */}
+                {Array.isArray(value) ? (
                   <ul className="border border-gray-300 rounded p-3 list-disc list-inside">
-                    {value.map((material, idx) => (
-                      <li key={idx}>{material}</li>
+                    {value.map((v, idx) => (
+                      <li key={idx}>{v}</li>
                     ))}
                   </ul>
                 ) : (
+                  // Handle date-like fields
                   <p className="border border-gray-300 rounded p-2">
-                    {field.isDate ? formatDate(value) : value}
+                    {key.toLowerCase().includes("date") ||
+                    key.toLowerCase().includes("on")
+                      ? formatDate(value)
+                      : value}
                   </p>
                 )}
               </div>
-            );
-          })}
+            ))}
         </div>
       </div>
     </div>

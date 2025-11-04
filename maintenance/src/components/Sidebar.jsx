@@ -6,6 +6,7 @@ import { FiChevronLeft, FiChevronRight } from "react-icons/fi";
 export default function Sidebar() {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [screenWidth, setScreenWidth] = useState(window.innerWidth);
+  const [activeTooltip, setActiveTooltip] = useState(null); // Track active tooltip for mobile
 
   // 🔹 Responsive behavior
   useEffect(() => {
@@ -29,6 +30,12 @@ export default function Sidebar() {
     }
   };
 
+  const handleLinkClick = (name) => {
+    if (screenWidth < 450) {
+      setActiveTooltip((prev) => (prev === name ? null : name));
+    }
+  };
+
   return (
     <div
       className={`fixed top-16 left-0 h-[calc(100%-4rem)] bg-gray-900 text-gray-200 
@@ -36,7 +43,7 @@ export default function Sidebar() {
       ${isCollapsed ? "w-20" : "w-64"}`}
     >
       {/* Header Section */}
-      <div className="flex items-center justify-between mb-8">
+      <div className="flex items-center justify-between mb-10">
         {/* Toggle button only for medium screens */}
         {screenWidth >= 450 && screenWidth < 1024 && (
           <button
@@ -49,39 +56,57 @@ export default function Sidebar() {
       </div>
 
       {/* Navigation Links */}
-      <nav className="flex flex-col gap-4">
+      <nav className="flex flex-col gap-6">
+        {" "}
+        {/* Increased gap from 4 → 6 */}
         {links[0].links.map((item) => (
-          <NavLink
-            key={item.name}
-            to={item.to}
-            className={({ isActive }) =>
-              `relative group flex items-center px-3 py-2 rounded-lg transition-colors
-              ${isCollapsed ? "justify-center" : "gap-3"}
-              ${
-                isActive
-                  ? "bg-blue-600 text-white"
-                  : "hover:bg-white hover:text-black"
-              }`
-            }
-          >
-            {/* Icon */}
-            <span className="text-xl">{item.icon}</span>
+          <div key={item.name} className="relative">
+            <NavLink
+              to={item.to}
+              onClick={() => handleLinkClick(item.name)}
+              className={({ isActive }) =>
+                `group flex items-center px-3 py-3 rounded-lg transition-colors
+                ${isCollapsed ? "justify-center" : "gap-3"}
+                ${
+                  isActive
+                    ? "bg-blue-600 text-white"
+                    : "hover:bg-white hover:text-black"
+                }`
+              }
+            >
+              {/* Icon */}
+              <span className="text-2xl">{item.icon}</span>
 
-            {/* Label (hidden when collapsed) */}
-            {!isCollapsed && (
-              <span className="whitespace-nowrap">{item.name}</span>
-            )}
+              {/* Label (hidden when collapsed) */}
+              {!isCollapsed && (
+                <span className="whitespace-nowrap text-base font-medium">
+                  {item.name}
+                </span>
+              )}
 
-            {/* Tooltip (shows for collapsed sidebar on hover) */}
-            {isCollapsed && (
-              <span
-                className="absolute left-full ml-2 px-2 py-1 rounded-md bg-gray-800 text-white text-xs 
-                opacity-0 group-hover:opacity-100 transition-opacity z-50"
-              >
-                {item.name}
-              </span>
-            )}
-          </NavLink>
+              {/* Tooltip (hover for collapsed on larger screens) */}
+              {isCollapsed && screenWidth >= 450 && (
+                <span
+                  className="absolute left-full ml-2 px-2 py-1 rounded-md bg-gray-800 text-white text-xs 
+                  opacity-0 group-hover:opacity-100 transition-opacity z-50"
+                >
+                  {item.name}
+                </span>
+              )}
+            </NavLink>
+
+            {/* Persistent Tooltip on small screens */}
+            {isCollapsed &&
+              screenWidth < 450 &&
+              activeTooltip === item.name && (
+                <div
+                  className="absolute left-1/2 transform -translate-x-1/2 mt-3 
+                px-3 py-1 bg-gray-800 text-white text-xs rounded-md shadow-lg"
+                >
+                  {item.name}
+                </div>
+              )}
+          </div>
         ))}
       </nav>
     </div>

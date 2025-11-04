@@ -2,7 +2,7 @@
 import Sidebar from './components/Sidebar'
 import { AppProvider } from './contexts/Appcontext';
 import {BrowserRouter, Routes, Route} from "react-router-dom"
-import { Dashboard, Workorders, WorkOrderDetail, MachineInventory, MachineDetails} from './pages';
+import { Dashboard, Workorders, WorkOrderDetail, MachineInventory, MachineDetails, MaintenanceSchedule, Notifications} from './pages';
 import Topbar from './components/Topbar';
 
 function App() {
@@ -23,6 +23,10 @@ function App() {
                 <Routes>
                   <Route path="/" element={<Dashboard />} />
                   <Route path="/dashboard" element={<Dashboard />} />
+                  <Route
+                    path="/maintenance-schedule"
+                    element={<MaintenanceSchedule />}
+                  />
                   <Route path="/work-orders" element={<Workorders />} />
                   <Route
                     path="/work-orders/:id"
@@ -33,6 +37,7 @@ function App() {
                     element={<MachineInventory />}
                   />
                   <Route path="/machines/:id" element={<MachineDetails />} />
+                  <Route path="/notifications" element={<Notifications />} />
                 </Routes>
               </AppProvider>
             </div>
